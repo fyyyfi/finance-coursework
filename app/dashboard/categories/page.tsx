@@ -32,6 +32,18 @@ export default function CategoriesPage() {
     fetchCategories();
   }, []);
 
+  // ФУНКЦІЯ ДЛЯ СТВОРЕННЯ БАЗОВИХ КАТЕГОРІЙ
+  const handleSetupDefaults = async () => {
+    try {
+      const response = await fetch("/api/setup");
+      const data = await response.json();
+      alert(data.message || data.error);
+      fetchCategories(); // Одразу оновлюємо список на екрані, щоб вони з'явилися
+    } catch (error) {
+      alert("Помилка при створенні базових категорій");
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -50,7 +62,7 @@ export default function CategoriesPage() {
 
       if (response.ok) {
         setName("");
-        fetchCategories(); // Оновлюємо список
+        fetchCategories(); 
       } else {
         const data = await response.json();
         setError(data.error || "Помилка при створенні");
@@ -66,7 +78,19 @@ export default function CategoriesPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Категорії</h1>
+      <div className="flex justify-between items-center mb-6 max-w-xl">
+        <h1 className="text-3xl font-bold text-gray-800">Категорії</h1>
+        
+        {/* Кнопка для генерації (показується тільки якщо категорій мало) */}
+        {categories.length < 5 && (
+          <button
+            onClick={handleSetupDefaults}
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm font-medium transition"
+          >
+            Згенерувати базові категорії
+          </button>
+        )}
+      </div>
 
       <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 mb-8 max-w-xl">
         <h2 className="text-xl font-semibold mb-4">Створити власну категорію</h2>
@@ -103,8 +127,8 @@ export default function CategoriesPage() {
               key={category.id} 
               className={`px-4 py-2 rounded-full border text-sm font-medium ${
                 category.isDefault 
-                  ? "bg-gray-100 border-gray-200 text-gray-600" // Сірі для базових
-                  : "bg-blue-50 border-blue-200 text-blue-700"  // Сині для власних
+                  ? "bg-gray-100 border-gray-200 text-gray-600" 
+                  : "bg-blue-50 border-blue-200 text-blue-700"  
               }`}
             >
               {category.name}
