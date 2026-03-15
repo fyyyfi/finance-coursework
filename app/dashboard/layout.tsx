@@ -47,6 +47,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           >
             Категорії
           </Link>
+          <Link 
+            href="/dashboard/transactions" 
+            className={`block px-4 py-2 rounded ${pathname === '/dashboard/transactions' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
+          >
+            Операції
+          </Link>
         </nav>
 
         <div className="p-4 border-t border-gray-200">
