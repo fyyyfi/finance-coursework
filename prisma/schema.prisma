@@ -15,6 +15,7 @@ model User {
   role     String    @default("USER") // Роль: "USER" або "ADMIN"
   
   accounts Account[]
+  categories Category[]
 }
 
 // Таблиця рахунків
@@ -34,6 +35,8 @@ model Category {
   id        String    @id @default(uuid())
   name      String    // Наприклад: "Продукти", "Транспорт"
   isDefault Boolean   @default(false) // true, якщо це базова категорія від адміна
+  userId    String?   
+  user      User?     @relation(fields: [userId], references: [id])
   
   transactions Transaction[]
 }

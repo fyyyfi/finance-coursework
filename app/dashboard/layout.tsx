@@ -29,7 +29,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
         
         <nav className="flex-1 p-4 flex flex-col gap-2">
-          {/* Якщо ми на /dashboard, кнопка стає синьою */}
           <Link 
             href="/dashboard" 
             className={`block px-4 py-2 rounded ${pathname === '/dashboard' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
@@ -41,6 +40,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             className={`block px-4 py-2 rounded ${pathname === '/dashboard/accounts' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
           >
             Рахунки
+          </Link>
+          <Link 
+            href="/dashboard/categories" 
+            className={`block px-4 py-2 rounded ${pathname === '/dashboard/categories' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
+          >
+            Категорії
           </Link>
         </nav>
 
