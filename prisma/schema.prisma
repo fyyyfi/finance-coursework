@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Таблиця користувачів
+model User {
+  id       String    @id @default(uuid())
+  email    String    @unique
+  password String
+  role     String    @default("USER") // Роль: "USER" або "ADMIN"
+  
+  accounts Account[]
+}
+
+// Таблиця рахунків
+model Account {
+  id       String    @id @default(uuid())
+  name     String    // Наприклад: "Готівка", "Картка"
+  balance  Float     @default(0)
+  
+  userId   String
+  user     User      @relation(fields: [userId], references: [id])
+  
+  transactions Transaction[]
+}
+
+// Таблиця категорій
+model Category {
+  id        String    @id @default(uuid())
+  name      String    // Наприклад: "Продукти", "Транспорт"
+  isDefault Boolean   @default(false) // true, якщо це базова категорія від адміна
+  
+  transactions Transaction[]
+}
+
+// Таблиця транзакцій
+model Transaction {
+  id          String    @id @default(uuid())
+  amount      Float
+  type        String    // "INCOME" (Дохід) або "EXPENSE" (Витрата)
+  description String
+  date        DateTime  @default(now())
+  
+  accountId   String
+  account     Account   @relation(fields: [accountId], references: [id])
+  
+  categoryId  String
+  category    Category  @relation(fields: [categoryId], references: [id])
+}
