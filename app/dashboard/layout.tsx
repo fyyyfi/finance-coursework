@@ -53,6 +53,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           >
             Операції
           </Link>
+
+          <Link 
+            href="/dashboard/reports" 
+            className={`block px-4 py-2 rounded ${pathname === '/dashboard/reports' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
+          >
+            Звіти
+          </Link>
+          <Link 
+            href="/dashboard/admin" 
+            className={`block px-4 py-2 rounded ${pathname === '/dashboard/admin' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
+          >
+            Адмін-панель
+          </Link>
         </nav>
 
         <div className="p-4 border-t border-gray-200">
@@ -74,4 +87,5 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </main>
     </div>
   );
+    
 }

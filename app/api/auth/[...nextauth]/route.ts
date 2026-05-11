@@ -3,7 +3,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "../../../../lib/prisma";
 import bcrypt from "bcryptjs";
 
-// Експортуємо налаштування, щоб бекенд міг перевіряти користувача
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -29,6 +28,23 @@ export const authOptions: NextAuthOptions = {
       }
     })
   ],
+  
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.role = (user as any).role;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session?.user) {
+        (session.user as any).role = token.role;
+      }
+      return session;
+    }
+  },
+
+
   session: { strategy: "jwt" },
   pages: { signIn: "/login" }
 };
