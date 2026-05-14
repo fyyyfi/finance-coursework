@@ -3,7 +3,7 @@ import { prisma } from "../../../lib/prisma";
 
 export async function GET() {
   try {
-    // Список категорій, які будуть доступні всім (можеш додати свої)
+    // Список категорій, які будуть доступні всім 
     const defaultCategories = [
       { name: "Продукти", isDefault: true },
       { name: "Транспорт", isDefault: true },
@@ -14,8 +14,6 @@ export async function GET() {
       { name: "Розваги", isDefault: true },
       { name: "Зарплата", isDefault: true },
     ];
-
-    // Перевіряємо, чи ми вже не створювали їх раніше, щоб не було дублікатів
     const existingDefaults = await prisma.category.findFirst({
       where: { isDefault: true }
     });
@@ -24,7 +22,6 @@ export async function GET() {
       return NextResponse.json({ message: "Базові категорії вже існують!" });
     }
 
-    // Зберігаємо їх у базу
     const created = await prisma.category.createMany({
       data: defaultCategories
     });

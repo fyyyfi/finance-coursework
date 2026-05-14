@@ -18,7 +18,7 @@ export async function GET() {
       return NextResponse.json({ error: "Користувача не знайдено" }, { status: 404 });
     }
 
-    // Шукаємо категорії: АБО вони "базові" (isDefault: true), АБО вони належать цьому користувачу
+    
     const categories = await prisma.category.findMany({
       where: {
         OR: [
@@ -26,7 +26,7 @@ export async function GET() {
           { userId: user.id }
         ]
       },
-      // Сортуємо за назвою за алфавітом, щоб було красиво
+    
       orderBy: { name: 'asc' }
     });
 
@@ -60,7 +60,6 @@ export async function POST(request: Request) {
     }
 
     // Створюємо нову категорію, яка належить саме цьому користувачу
-    // Поле isDefault буде автоматично false (так прописано в schema.prisma)
     const newCategory = await prisma.category.create({
       data: {
         name: name,

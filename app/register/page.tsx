@@ -10,15 +10,13 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   
-  // Це потрібно, щоб перенаправити користувача на іншу сторінку після успіху
   const router = useRouter();
 
-  // Ця функція спрацює, коли користувач натисне "Зареєструватися"
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); // Зупиняємо стандартне перезавантаження сторінки
-    setError(""); // Очищаємо попередні помилки, якщо вони були
+    setError(""); 
 
-    // Відправляємо запит на наш бекенд
+    // Відправляємо запит на бекенд
     const response = await fetch("/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -29,7 +27,7 @@ export default function RegisterPage() {
 
     if (response.ok) {
       alert("Реєстрація успішна! Тепер ви можете увійти.");
-      router.push("/login"); // Перекидаємо на сторінку входу (її ми створимо наступною)
+      router.push("/login"); 
     } else {
       setError(data.error); // Показуємо помилку від сервера (наприклад, "email вже існує")
     }
@@ -40,7 +38,7 @@ export default function RegisterPage() {
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-center mb-6">Реєстрація</h2>
         
-        {/* Якщо є помилка, показуємо її червоним текстом */}
+        {}
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">

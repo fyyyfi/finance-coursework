@@ -26,7 +26,7 @@ export default function LoginPage() {
     if (result?.error) {
       setError("Невірний email або пароль");
     } else {
-      // Якщо вхід успішний, переходимо на головну сторінку додатку (дашборд)
+      // Якщо вхід успішний, переходимо на головну сторінку додатку 
       router.push("/dashboard");
     }
   };

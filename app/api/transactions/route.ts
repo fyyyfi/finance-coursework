@@ -3,7 +3,6 @@ import { prisma } from "../../../lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 
-// Метод GET - для отримання історії операцій
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
@@ -13,7 +12,6 @@ export async function GET() {
 
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
-      // Одразу дістаємо ID рахунків користувача, щоб знайти тільки його транзакції
       include: { accounts: { select: { id: true } } }
     });
 
@@ -24,12 +22,11 @@ export async function GET() {
     // Шукаємо транзакції, які належать рахункам цього користувача
     const transactions = await prisma.transaction.findMany({
       where: { accountId: { in: accountIds } },
-      // Додаємо інформацію про рахунок та категорію, щоб вивести їх назви на фронтенді
       include: {
         account: { select: { name: true } },
         category: { select: { name: true } }
       },
-      orderBy: { date: 'desc' } // Найновіші зверху
+      orderBy: { date: 'desc' } 
     });
 
     return NextResponse.json(transactions);
@@ -39,7 +36,6 @@ export async function GET() {
   }
 }
 
-// Метод POST - для додавання нової витрати чи доходу
 export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
@@ -47,7 +43,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Не авторизовано" }, { status: 401 });
     }
 
-    // Отримуємо дані з форми
     const body = await request.json();
     const { amount, type, description, accountId, categoryId, date } = body;
 
@@ -55,7 +50,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Заповніть всі обов'язкові поля" }, { status: 400 });
     }
 
-    // Перевіряємо, чи існує рахунок і чи належить він користувачу
     const account = await prisma.account.findUnique({
       where: { id: accountId }
     });
@@ -64,14 +58,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Рахунок не знайдено" }, { status: 404 });
     }
 
-    // Визначаємо, як зміниться баланс
     const numAmount = Number(amount);
     let newBalance = account.balance;
 
     if (type === "EXPENSE") {
-      newBalance -= numAmount; // Віднімаємо витрату
+      newBalance -= numAmount; 
     } else if (type === "INCOME") {
-      newBalance += numAmount; // Додаємо дохід
+      newBalance += numAmount; 
     }
 
     // Використовуємо prisma.$transaction, щоб виконати дві дії одночасно:
